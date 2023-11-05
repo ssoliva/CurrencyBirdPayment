@@ -1,17 +1,21 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 const app = express();
 
 dotenv.config();
 
-app.set("port", process.env.PORT);
+const PORT = process.env.PORT || 3000;
+
+app.use( express.json() );
+app.use( cors( { origin: `http://localhost:${ PORT }` } ) );
 
 
 app.get('/', (req, res) => {
   res.send('Hello NOD Readers!');
 });
 
-app.listen(app.get('port'), () => {
-return console.log(`Express server is listening at http://localhost:${app.get('port')} 🚀`);
+app.listen(PORT, () => {
+return console.log(`Express server is listening at http://localhost:${PORT} 🚀`);
 });
