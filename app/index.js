@@ -1,6 +1,6 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
+const express = require('express');
+const dotenv = require('dotenv');
+const cors = require('cors');
 
 const app = express();
 
@@ -13,7 +13,7 @@ app.use( cors( { origin: `http://localhost:${ PORT }` } ) );
 
 
 app.get('/', (req, res) => {
-  res.send('Hello NOD Readers!');
+  res.send('Hello World! Welcome to the ApiPayments server');
 });
 
 app.listen(PORT, () => {
