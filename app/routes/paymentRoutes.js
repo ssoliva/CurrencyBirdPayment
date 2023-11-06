@@ -56,7 +56,10 @@ PaymentRoutes.post('/', async (req, res) => {
     return res.status(500).json({ error: 'There was an error sending the payment' });
 
   } catch (error) {
+    console.log("\n\n\n");
     console.log(error.response);
+    console.log(error),
+    console.log("\n\n\n");
     return res.status(500).json({ error: 'There was an error sending the payment' });
   }
 });
