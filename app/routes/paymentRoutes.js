@@ -23,35 +23,39 @@ PaymentRoutes.post('/', async (req, res) => {
 
     const tokenResponse = await axios.get(`${process.env.DEV_URL}token?email=${email}`)
 
+    if (tokenResponse.data.status === 'error') {
+      return res.status(500).json({ error: 'There was an error obtaining your associated token' });
+    }
+
     const payment = await Payment.findOne({ where: { email } });
     if (payment) {
       payment.retries += 1;
       await payment.save();
       return res.status(401).json({ error: 'Payment already sent', payment: payment.toJSON() });
     }
-    else {
-      const paymentResponse = await axios.post(`${process.env.DEV_URL}payment?email=${email}&transferCode=${transferCode}`, {
-        transferCode,
-        amount
-      }, {
-        headers: {
-          Authorization: tokenResponse.data
-        }
-      });
 
-      // Revisar respuesta del payment !!!
+    const paymentResponse = await axios.post(`${process.env.DEV_URL}payment?email=${email}&transferCode=${transferCode}`, {
+      transferCode,
+      amount
+    }, {
+      headers: {
+        Authorization: tokenResponse.data
+      }
+    });
+
+    if (paymentResponse.data.status === 'success') {
       const newPayment = await Payment.create({
         amount,
         transferCode,
         email
       });
       return res.status(201).json(newPayment);
-    }
+    } 
+    
+    return res.status(500).json({ error: 'There was an error sending the payment' });
 
   } catch (error) {
-    console.log(`\n\n\n${error}`);
     console.log(error.response);
-    console.log("\n\n\n");
     return res.status(500).json({ error: 'There was an error sending the payment' });
   }
 });
