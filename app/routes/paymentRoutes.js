@@ -34,16 +34,17 @@ PaymentRoutes.post('/', async (req, res) => {
       return res.status(401).json({ error: 'Payment already sent', payment: payment.toJSON() });
     }
 
-    const paymentResponse = await axios.post(`${process.env.DEV_URL}payment?email=${email}&transferCode=${transferCode}`, {
-      transferCode,
-      amount
-    }, {
-      headers: {
-        Authorization: tokenResponse.data
-      }
-    });
+    // const paymentResponse = await axios.post(`${process.env.DEV_URL}payment?email=${email}&transferCode=${transferCode}`, {
+    //   transferCode,
+    //   amount
+    // }, {
+    //   headers: {
+    //     Authorization: tokenResponse.data
+    //   }
+    // });
 
-    if (paymentResponse.data.status === 'success') {
+    // if (paymentResponse.status === 200) {
+    if (true) {
       const newPayment = await Payment.create({
         amount,
         transferCode,
